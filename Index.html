@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Parade Kostum & Yel-Yel</title>
+    <style>
+        :root {
+            --merah: #DC143C;
+            --merah-tua: #A51020;
+            --merah-muda: #FFE4E8;
+            --putih: #FFFFFF;
+            --emas: #FFD700;
+            --perak: #C0C0C0;
+            --perunggu: #CD7F32;
+            --hijau: #28A745;
+            --biru: #007BFF;
+            --kuning: #FFC107;
+            --merah-alert: #DC3545;
+            --abu: #F8F9FA;
+            --abu-gelap: #343A40;
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            color: var(--abu-gelap);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--merah) 0%, var(--merah-tua) 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(220,20,60,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, white 33%, transparent 33%, transparent 67%, white 67%);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .header .logo-icon {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover { color: var(--merah); background: var(--merah-muda); }
+        .nav-tab.active {
+            color: var(--merah);
+            border-bottom-color: var(--merah);
+            background: var(--merah-muda);
+        }
+
+        .nav-tab .tab-icon { font-size: 1.2em; display: block; margin-bottom: 3px; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover { box-shadow: var(--shadow-hover); }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--merah);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--merah-muda);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85em;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            background: #FAFAFA;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--merah);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220,20,60,0.1);
+            background: white;
+        }
+
+        /* PENILAIAN TABLE */
+        .penilaian-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .penilaian-table thead {
+            background: linear-gradient(135deg, var(--merah) 0%, var(--merah-tua) 100%);
+            color: white;
+        }
+
+        .penilaian-table th {
+            padding: 14px 12px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .penilaian-table td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid #F0F0F0;
+            font-size: 0.9em;
+        }
+
+        .penilaian-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .penilaian-table tbody tr:hover {
+            background: var(--merah-muda);
+        }
+
+        .penilaian-table tbody tr:last-child td { border-bottom: none; }
+
+        .penilaian-table .input-nilai {
+            width: 80px;
+            padding: 8px 10px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .penilaian-table .input-nilai:focus {
+            border-color: var(--merah);
+            box-shadow: 0 0 0 3px rgba(220,20,60,0.15);
+            outline: none;
+        }
+
+        .penilaian-table .skor-cell {
+            font-weight: 700;
+            font-size: 1.1em;
+            min-width: 70px;
+        }
+
+        .penilaian-table .lokasi-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .lokasi-lapangan { background: #E3F2FD; color: #1565C0; }
+        .lokasi-posko { background: #E8F5E9; color: #2E7D32; }
+        .lokasi-bayangan { background: #FFF3E0; color: #E65100; }
+
+        /* TOTAL BOX */
+        .total-box {
+            background: linear-gradient(135deg, var(--merah) 0%, var(--merah-tua) 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(220,20,60,0.3);
+        }
+
+        .total-box .label { font-size: 0.9em; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; }
+        .total-box .nilai { font-size: 3em; font-weight: 800; margin: 5px 0; }
+        .total-box .keterangan {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--merah) 0%, var(--merah-tua) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220,20,60,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6C757D 0%, #495057 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--hijau) 0%, #1E7E34 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* REKAP TABLE */
+        .rekap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .rekap-table thead {
+            background: linear-gradient(135deg, var(--merah) 0%, var(--merah-tua) 100%);
+            color: white;
+        }
+
+        .rekap-table th {
+            padding: 14px 10px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .rekap-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .rekap-table tbody tr:hover { background: var(--merah-muda); }
+
+        .rekap-table .total-cell {
+            font-weight: 800;
+            font-size: 1.1em;
+        }
+
+        .rekap-table .rank-cell {
+            font-weight: 800;
+            font-size: 1.2em;
+        }
+
+        .rank-1 { color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .rank-2 { color: #C0C0C0; }
+        .rank-3 { color: #CD7F32; }
+
+        .badge-status {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+        }
+
+        .badge-sangat-baik { background: #D4EDDA; color: #155724; }
+        .badge-baik { background: #D1ECF1; color: #0C5460; }
+        .badge-cukup { background: #FFF3CD; color: #856404; }
+        .badge-perlu { background: #F8D7DA; color: #721C24; }
+
+        /* DASHBOARD */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--merah);
+        }
+
+        .stat-card .stat-icon { font-size: 2em; margin-bottom: 8px; }
+        .stat-card .stat-value { font-size: 2em; font-weight: 800; color: var(--merah); }
+        .stat-card .stat-label { font-size: 0.85em; color: #888; font-weight: 600; text-transform: uppercase; }
+
+        /* PODIUM */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .podium-item {
+            text-align: center;
+            padding: 20px 25px;
+            border-radius: 16px;
+            min-width: 180px;
+            transition: transform 0.3s;
+        }
+
+        .podium-item:hover { transform: scale(1.05); }
+
+        .podium-1 {
+            background: linear-gradient(180deg, #FFF8E1 0%, #FFE082 100%);
+            border: 3px solid var(--emas);
+            order: 2;
+        }
+
+        .podium-2 {
+            background: linear-gradient(180deg, #F5F5F5 0%, #E0E0E0 100%);
+            border: 3px solid var(--perak);
+            order: 1;
+        }
+
+        .podium-3 {
+            background: linear-gradient(180deg, #FFF3E0 0%, #FFCC80 100%);
+            border: 3px solid var(--perunggu);
+            order: 3;
+        }
+
+        .podium-rank {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .podium-1 .podium-rank { color: var(--emas); }
+        .podium-2 .podium-rank { color: var(--perak); }
+        .podium-3 .podium-rank { color: var(--perunggu); }
+
+        .podium-name { font-weight: 700; font-size: 1.1em; margin-bottom: 3px; }
+        .podium-score { font-weight: 800; font-size: 1.3em; color: var(--abu-gelap); }
+        .podium-medal { font-size: 1.5em; margin-bottom: 8px; }
+
+        /* DETAIL PER PESERTA */
+        .detail-section { margin-bottom: 25px; }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-header h3 { color: var(--merah); font-size: 1.2em; }
+
+        /* CHART BAR */
+        .chart-container { margin: 20px 0; }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 200px;
+            padding: 0 10px;
+            border-bottom: 2px solid #E0E0E0;
+        }
+
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
+        }
+
+        .bar-fill {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.8s ease;
+            min-height: 5px;
+            position: relative;
+        }
+
+        .bar-label {
+            font-size: 0.65em;
+            color: #666;
+            margin-top: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .bar-value {
+            font-size: 0.7em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        /* PRINT */
+        @media print {
+            .nav-tabs, .btn-group, .no-print { display: none !important; }
+            .header { padding: 15px; }
+            .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            body { background: white; }
+            .tab-content { display: block !important; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.3em; }
+            .form-grid { grid-template-columns: 1fr; }
+            .penilaian-table th, .penilaian-table td { padding: 10px 6px; font-size: 0.75em; }
+            .penilaian-table .input-nilai { width: 60px; padding: 6px 4px; }
+            .total-box .nilai { font-size: 2.2em; }
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+            .podium-container { flex-direction: column; align-items: center; }
+            .podium-item { order: unset !important; min-width: 90%; }
+            .btn { padding: 10px 20px; font-size: 0.85em; }
+            .btn-group { flex-direction: column; }
+            .btn-group .btn { width: 100%; justify-content: center; }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card { animation: fadeIn 0.5s ease; }
+
+        /* ALERT */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .alert-success { background: #D4EDDA; color: #155724; border: 1px solid #C3E6CB; }
+        .alert-danger { background: #F8D7DA; color: #721C24; border: 1px solid #F5C6CB; }
+
+        .hidden { display: none !important; }
+
+        /* PESERTA SELECTOR */
+        .peserta-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--abu);
+            border-radius: 12px;
+        }
+
+        .peserta-selector label { font-weight: 700; font-size: 0.9em; }
+
+        .peserta-selector select {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            z-index: 9999;
+            animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+        }
+
+        .toast-success { background: linear-gradient(135deg, var(--hijau), #1E7E34); }
+        .toast-error { background: linear-gradient(135deg, var(--merah-alert), #A71D2A); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* Progress Ring */
+        .progress-ring {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 1.8em;
+            font-weight: 900;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-icon">🇮🇩</div>
+        <h1>Sistem Penilaian Lomba</h1>
+        <p>Parade Kostum & Yel-Yel — Kemerdekaan Republik Indonesia</p>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('form')">
+            <span class="tab-icon">📝</span>Input Nilai
+        </button>
+        <button class="nav-tab" onclick="switchTab('rekap')">
+            <span class="tab-icon">📊</span>Rekap Nilai
+        </button>
+        <button class="nav-tab" onclick="switchTab('dashboard')">
+            <span class="tab-icon">🏆</span>Dashboard
+        </button>
+        <button class="nav-tab" onclick="switchTab('peringkat')">
+            <span class="tab-icon">🥇</span>Peringkat Juara
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- ==================== TAB 1: INPUT NILAI ==================== -->
+        <div id="tab-form" class="tab-content active">
+
+            <!-- FORM IDENTITAS -->
+            <div class="card">
+                <div class="card-title">📋 Form Identitas</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nama Perusahaan</label>
+                        <input type="text" id="namaPerusahaan" placeholder="PT. Contoh Sejahtera">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal Kegiatan</label>
+                        <input type="date" id="tanggalKegiatan">
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasi Acara</label>
+                        <input type="text" id="lokasiAcara" placeholder="Lapangan Merdeka">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Juri</label>
+                        <input type="text" id="namaJuri" placeholder="Bapak/Ibu Juri">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESERTA -->
+            <div class="card">
+                <div class="card-title">👥 Data Peserta</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nama Peserta / Tim</label>
+                        <input type="text" id="namaPeserta" placeholder="Tim Garuda Merah">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Anggota</label>
+                        <input type="number" id="jumlahAnggota" placeholder="10" min="1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERT -->
+            <div id="alertBox" class="alert"></div>
+
+            <!-- TABEL PENILAIAN -->
+            <div class="card">
+                <div class="card-title">🎯 Form Penilaian</div>
+                <div class="peserta-selector">
+                    <label>Menilai:</label>
+                    <strong id="currentPeserta" style="color: var(--merah); font-size: 1.1em;">Belum dipilih</strong>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="penilaian-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">No</th>
+                                <th style="width:12%">Lokasi</th>
+                                <th style="width:20%">Kriteria</th>
+                                <th style="width:10%">Bobot</th>
+                                <th style="width:15%">Deskripsi</th>
+                                <th style="width:12%">Nilai (0-100)</th>
+                                <th style="width:12%">Skor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="penilaianBody">
+                            <!-- Generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TOTAL BOX -->
+                <div class="total-box">
+                    <div class="label">Total Nilai Akhir</div>
+                    <div class="nilai" id="totalNilai">0.00</div>
+                    <div class="keterangan" id="keteranganNilai" style="background: rgba(255,255,255,0.2);">Belum dinilai</div>
+                </div>
+
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-primary" onclick="simpanNilai()">💾 Simpan Nilai</button>
+                    <button class="btn btn-secondary" onclick="resetForm()">🔄 Reset Form</button>
+                    <button class="btn btn-success" onclick="tambahPesertaBaru()">➕ Tambah Peserta</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 2: REKAP NILAI ==================== -->
+        <div id="tab-rekap" class="tab-content">
+            <div class="card">
+                <div class="card-title">📊 Rekap Nilai Seluruh Peserta</div>
+                <div style="overflow-x: auto;">
+                    <table class="rekap-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Peserta</th>
+                                <th>Jml Anggota</th>
+                                <th>Kreativitas (20%)</th>
+                                <th>Kerapihan (15%)</th>
+                                <th>Warna (10%)</th>
+                                <th>Kekompakan (15%)</th>
+                                <th>Semangat (15%)</th>
+                                <th>Orisinalitas (10%)</th>
+                                <th>Kedisiplinan (10%)</th>
+                                <th>Interaksi (5%)</th>
+                                <th>TOTAL</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rekapBody">
+                            <tr><td colspan="13" style="padding: 30px; color: #999;">Belum ada data penilaian</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn-group no-print">
+                    <button class="btn btn-gold" onclick="cetakPDF()">🖨️ Cetak PDF</button>
+                    <button class="btn btn-secondary" onclick="exportCSV()">📥 Export CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 3: DASHBOARD ==================== -->
+        <div id="tab-dashboard" class="tab-content">
+            <div class="card">
+                <div class="card-title">📈 Dashboard Hasil Lomba</div>
+
+                <!-- STATS -->
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="statPeserta">0</div>
+                        <div class="stat-label">Total Peserta</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="statRata">0</div>
+                        <div class="stat-label">Rata-rata Nilai</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="statTertinggi">0</div>
+                        <div class="stat-label">Nilai Tertinggi</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📉</div>
+                        <div class="stat-value" id="statTerendah">0</div>
+                        <div class="stat-label">Nilai Terendah</div>
+                    </div>
+                </div>
+
+                <!-- CHART -->
+                <div class="chart-container">
+                    <h4 style="margin-bottom: 15px; color: var(--merah);">📊 Grafik Perbandingan Nilai Peserta</h4>
+                    <div class="bar-chart" id="barChart"></div>
+                </div>
+
+                <!-- DETAIL PER PESERTA -->
+                <div id="detailPesertaContainer"></div>
+
+                <div class="btn-group no-print">
+                    <button class="btn btn-gold" onclick="cetakPDF()">🖨️ Cetak Laporan PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 4: PERINGKAT JUARA ==================== -->
+        <div id="tab-peringkat" class="tab-content">
+            <div class="card">
+                <div class="card-title">🏆 Peringkat Juara</div>
+
+                <!-- PODIUM -->
+                <div class="podium-container" id="podiumContainer">
+                    <div style="padding: 40px; color: #999; text-align: center;">
+                        Belum ada data penilaian. Silakan input nilai terlebih dahulu.
+                    </div>
+                </div>
+
+                <!-- FULL RANKING TABLE -->
+                <div style="overflow-x: auto; margin-top: 30px;">
+                    <table class="rekap-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">Peringkat</th>
+                                <th>Nama Peserta</th>
+                                <th style="width: 15%;">Total Nilai</th>
+                                <th style="width: 15%;">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingBody">
+                            <tr><td colspan="4" style="padding: 30px; color: #999;">Belum ada data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="btn-group no-print" style="justify-content: center;">
+                    <button class="btn btn-gold" onclick="cetakPDF()">🖨️ Cetak Sertifikat Juara</button>
+                    <button class="btn btn-primary" onclick="switchTab('form')">📝 Tambah Penilaian</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==================== DATA KATEGORI ====================
+        const kategori = [
+            { no: 1, lokasi: 'Lapangan', nama: 'Kreativitas Kostum', bobot: 20, deskripsi: 'Keunikan desain, ide kreatif, inovasi bahan, dan konsep kostum', kelasLokasi: 'lokasi-lapangan' },
+            { no: 2, lokasi: 'Lapangan', nama: 'Kerapihan & Kesesuaian Tema', bobot: 15, deskripsi: 'Kostum sesuai tema, rapi, serasi antar anggota', kelasLokasi: 'lokasi-lapangan' },
+            { no: 3, lokasi: 'Lapangan', nama: 'Warna & Estetika', bobot: 10, deskripsi: 'Kombinasi warna harmonis, menarik, daya tarik visual', kelasLokasi: 'lokasi-lapangan' },
+            { no: 4, lokasi: 'Posko 3', nama: 'Kekompakan Yel-Yel', bobot: 15, deskripsi: 'Gerakan kompak, sinkronisasi suara, kerjasama tim', kelasLokasi: 'lokasi-posko' },
+            { no: 5, lokasi: 'Posko 3', nama: 'Semangat & Energi', bobot: 15, deskripsi: 'Antusiasme, ekspresi wajah, semangat, interaksi penonton', kelasLokasi: 'lokasi-posko' },
+            { no: 6, lokasi: 'Posko 3', nama: 'Orisinalitas Yel-Yel', bobot: 10, deskripsi: 'Tidak meniru, ciri khas, kreativitas sendiri', kelasLokasi: 'lokasi-posko' },
+            { no: 7, lokasi: 'Juri Bayangan', nama: 'Parade Kedisiplinan', bobot: 10, deskripsi: 'Ketepatan waktu, keteraturan barisan, sikap & etika', kelasLokasi: 'lokasi-bayangan' },
+            { no: 8, lokasi: 'Juri Bayangan', nama: 'Interaksi & Hiburan', bobot: 5, deskripsi: 'Kemampuan menghibur, suasana positif, komunikasi penonton', kelasLokasi: 'lokasi-bayangan' }
+        ];
+
+        // ==================== STATE ====================
+        let pesertaList = [];
+        let currentPesertaIndex = -1;
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPenilaianTable();
+            loadData();
+            document.getElementById('tanggalKegiatan').valueAsDate = new Date();
+        });
+
+        // ==================== RENDER TABEL PENILAIAN ====================
+        function renderPenilaianTable() {
+            const tbody = document.getElementById('penilaianBody');
+            tbody.innerHTML = '';
+
+            kategori.forEach((k, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${k.no}</strong></td>
+                    <td><span class="lokasi-badge ${k.kelasLokasi}">${k.lokasi}</span></td>
+                    <td style="text-align: left; font-weight: 600;">${k.nama}</td>
+                    <td><strong>${k.bobot}%</strong></td>
+                    <td style="text-align: left; font-size: 0.8em; color: #666;">${k.deskripsi}</td>
+                    <td><input type="number" class="input-nilai" id="nilai_${i}" min="0" max="100" step="0.1" placeholder="0-100" oninput="hitungSkor()"></td>
+                    <td class="skor-cell" id="skor_${i}">0.00</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ==================== HITUNG SKOR ====================
+        function hitungSkor() {
+            let total = 0;
+
+            kategori.forEach((k, i) => {
+                const input = document.getElementById(`nilai_${i}`);
+                const skorCell = document.getElementById(`skor_${i}`);
+                let nilai = parseFloat(input.value) || 0;
+
+                if (nilai > 100) { input.value = 100; nilai = 100; }
+                if (nilai < 0) { input.value = 0; nilai = 0; }
+
+                const skor = (nilai * k.bobot) / 100;
+                total += skor;
+                skorCell.textContent = skor.toFixed(2);
+            });
+
+            document.getElementById('totalNilai').textContent = total.toFixed(2);
+            updateKeterangan(total);
+        }
+
+        function updateKeterangan(total) {
+            const el = document.getElementById('keteranganNilai');
+            let text, color;
+
+            if (total >= 91) { text = '🌟 Sangat Baik'; color = 'rgba(40,167,69,0.9)'; }
+            else if (total >= 76) { text = '✅ Baik'; color = 'rgba(0,123,255,0.9)'; }
+            else if (total >= 61) { text = '⚠️ Cukup'; color = 'rgba(255,193,7,0.95)'; }
+            else if (total > 0) { text = '❌ Perlu Perbaikan'; color = 'rgba(220,53,69,0.9)'; }
+            else { text = 'Belum dinilai'; color = 'rgba(255,255,255,0.2)'; }
+
+            el.textContent = text;
+            el.style.background = color;
+            el.style.color = total <= 60 && total > 0 ? '#333' : 'white';
+        }
+
+        // ==================== SIMPAN NILAI ====================
+        function simpanNilai() {
+            const nama = document.getElementById('namaPeserta').value.trim();
+            const jml = document.getElementById('jumlahAnggota').value;
+            const perusahaan = document.getElementById('namaPerusahaan').value.trim();
+            const tanggal = document.getElementById('tanggalKegiatan').value;
+            const lokasi = document.getElementById('lokasiAcara').value.trim();
+            const juri = document.getElementById('namaJuri').value.trim();
+
+            if (!nama) {
+                showAlert('Mohon isi nama peserta!', 'danger');
+                return;
+            }
+
+            const nilaiArr = [];
+            let total = 0;
+            let allFilled = true;
+
+            kategori.forEach((k, i) => {
+                const input = document.getElementById(`nilai_${i}`);
+                const val = parseFloat(input.value);
+                if (isNaN(val) || val === '') { allFilled = false; }
+                const skor = ((val || 0) * k.bobot) / 100;
+                total += skor;
+                nilaiArr.push({ nilai: val || 0, skor: skor, bobot: k.bobot });
+            });
+
+            if (!allFilled) {
+                if (!confirm('Beberapa nilai belum diisi. Tetap simpan?')) return;
+            }
+
+            const pesertaData = {
+                nama,
+                jumlahAnggota: jml || '-',
+                perusahaan,
+                tanggal,
+                lokasi,
+                juri,
+                nilai: nilaiArr,
+                total: parseFloat(total.toFixed(2)),
+                timestamp: new Date().toISOString()
+            };
+
+            // Update or add
+            if (currentPesertaIndex >= 0 && pesertaList[currentPesertaIndex]) {
+                pesertaList[currentPesertaIndex] = pesertaData;
+                showToast('Nilai berhasil diperbarui!', 'success');
+            } else {
+                pesertaList.push(pesertaData);
+                showToast('Nilai berhasil disimpan!', 'success');
+            }
+
+            saveData();
+            updateRekap();
+            updateDashboard();
+            updatePeringkat();
+        }
+
+        // ==================== RESET FORM ====================
+        function resetForm() {
+            document.getElementById('namaPeserta').value = '';
+            document.getElementById('jumlahAnggota').value = '';
+            currentPesertaIndex = -1;
+            document.getElementById('currentPeserta').textContent = 'Belum dipilih';
+
+            kategori.forEach((k, i) => {
+                document.getElementById(`nilai_${i}`).value = '';
+                document.getElementById(`skor_${i}`).textContent = '0.00';
+            });
+
+            document.getElementById('totalNilai').textContent = '0.00';
+            document.getElementById('keteranganNilai').textContent = 'Belum dinilai';
+            document.getElementById('keteranganNilai').style.background = 'rgba(255,255,255,0.2)';
+        }
+
+        function tambahPesertaBaru() {
+            resetForm();
+            document.getElementById('namaPeserta').focus();
+            showToast('Form siap untuk peserta baru', 'success');
+        }
+
+        // ==================== UPDATE REKAP ====================
+        function updateRekap() {
+            const tbody = document.getElementById('rekapBody');
+
+            if (pesertaList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" style="padding: 30px; color: #999;">Belum ada data penilaian</td></tr>';
+                return;
+            }
+
+            const sorted = [...pesertaList].sort((a, b) => b.total - a.total);
+
+            tbody.innerHTML = sorted.map((p, i) => {
+                const ket = getKeterangan(p.total);
+                const badgeClass = getBadgeClass(p.total);
+                return `
+                    <tr>
+                        <td><strong>${i + 1}</strong></td>
+                        <td style="text-align: left; font-weight: 600;">${p.nama}</td>
+                        <td>${p.jumlahAnggota}</td>
+                        <td>${p.nilai[0].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[1].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[2].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[3].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[4].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[5].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[6].nilai.toFixed(1)}</td>
+                        <td>${p.nilai[7].nilai.toFixed(1)}</td>
+                        <td class="total-cell">${p.total.toFixed(2)}</td>
+                        <td><span class="badge-status ${badgeClass}">${ket}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ==================== UPDATE DASHBOARD ====================
+        function updateDashboard() {
+            // Stats
+            document.getElementById('statPeserta').textContent = pesertaList.length;
+
+            if (pesertaList.length > 0) {
+                const totals = pesertaList.map(p => p.total);
+                const avg = totals.reduce((a, b) => a + b, 0) / totals.length;
+                const max = Math.max(...totals);
+                const min = Math.min(...totals);
+
+                document.getElementById('statRata').textContent = avg.toFixed(1);
+                document.getElementById('statTertinggi').textContent = max.toFixed(1);
+                document.getElementById('statTerendah').textContent = min.toFixed(1);
+
+                // Bar Chart
+                const chart = document.getElementById('barChart');
+                const maxVal = Math.max(...totals, 100);
+                chart.innerHTML = '';
+
+                const sorted = [...pesertaList].sort((a, b) => b.total - a.total);
+                sorted.forEach((p, i) => {
+                    const height = (p.total / maxVal) * 100;
+                    let barColor;
+                    if (p.total >= 91) barColor = 'linear-gradient(180deg, #28a745, #20c997)';
+                    else if (p.total >= 76) barColor = 'linear-gradient(180deg, #007bff, #00bcd4)';
+                    else if (p.total >= 61) barColor = 'linear-gradient(180deg, #ffc107, #ff9800)';
+                    else barColor = 'linear-gradient(180deg, #dc3545, #e91e63)';
+
+                    chart.innerHTML += `
+                        <div class="bar-item">
+                            <div class="bar-value">${p.total.toFixed(1)}</div>
+                            <div class="bar-fill" style="height: ${height}%; background: ${barColor};"></div>
+                            <div class="bar-label">${p.nama.length > 12 ? p.nama.substring(0, 12) + '...' : p.nama}</div>
+                        </div>
+                    `;
+                });
+
+                // Detail per peserta
+                const container = document.getElementById('detailPesertaContainer');
+                container.innerHTML = '<h4 style="margin: 25px 0 15px; color: var(--merah);">📋 Detail Nilai Per Peserta</h4>';
+
+                sorted.forEach(p => {
+                    container.innerHTML += `
+                        <div style="background: var(--abu); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                            <div class="detail-header">
+                                <h3>🏅 ${p.nama}</h3>
+                                <span class="badge-status ${getBadgeClass(p.total)}">${getKeterangan(p.total)} (${p.total.toFixed(2)})</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
+                                ${p.nilai.map((n, i) => `
+                                    <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: white; border-radius: 8px;">
+                                        <span style="font-size: 0.85em;">${kategori[i].nama}</span>
+                                        <strong style="color: ${n.nilai >= 76 ? 'var(--hijau)' : n.nilai >= 61 ? 'var(--kuning)' : 'var(--merah-alert)'};">${n.nilai.toFixed(1)}</strong>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                document.getElementById('statRata').textContent = '0';
+                document.getElementById('statTertinggi').textContent = '0';
+                document.getElementById('statTerendah').textContent = '0';
+                document.getElementById('barChart').innerHTML = '';
+                document.getElementById('detailPesertaContainer').innerHTML = '';
+            }
+        }
+
+        // ==================== UPDATE PERINGKAT ====================
+        function updatePeringkat() {
+            if (pesertaList.length === 0) {
+                document.getElementById('podiumContainer').innerHTML = '<div style="padding: 40px; color: #999; text-align: center;">Belum ada data penilaian</div>';
+                document.getElementById('rankingBody').innerHTML = '<tr><td colspan="4" style="padding: 30px; color: #999;">Belum ada data</td></tr>';
+                return;
+            }
+
+            const sorted = [...pesertaList].sort((a, b) => b.total - a.total);
+            const medals = ['🥇', '🥈', '🥉'];
+            const podiumClasses = ['podium-1', 'podium-2', 'podium-3'];
+
+            // Podium (top 3)
+            let podiumHTML = '';
+            sorted.slice(0, 3).forEach((p, i) => {
+                podiumHTML += `
+                    <div class="podium-item ${podiumClasses[i]}">
+                        <div class="podium-medal">${medals[i]}</div>
+                        <div class="podium-rank">#${i + 1}</div>
+                        <div class="podium-name">${p.nama}</div>
+                        <div class="podium-score">${p.total.toFixed(2)}</div>
+                        <span class="badge-status ${getBadgeClass(p.total)}" style="margin-top: 8px;">${getKeterangan(p.total)}</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('podiumContainer').innerHTML = podiumHTML;
+
+            // Full ranking table
+            document.getElementById('rankingBody').innerHTML = sorted.map((p, i) => `
+                <tr>
+                    <td class="rank-cell ${i < 3 ? 'rank-' + (i+1) : ''}">${i + 1} ${i < 3 ? medals[i] : ''}</td>
+                    <td style="text-align: left; font-weight: 600;">${p.nama}</td>
+                    <td class="total-cell">${p.total.toFixed(2)}</td>
+                    <td><span class="badge-status ${getBadgeClass(p.total)}">${getKeterangan(p.total)}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== HELPER FUNCTIONS ====================
+        function getKeterangan(nilai) {
+            if (nilai >= 91) return 'Sangat Baik';
+            if (nilai >= 76) return 'Baik';
+            if (nilai >= 61) return 'Cukup';
+            return 'Perlu Perbaikan';
+        }
+
+        function getBadgeClass(nilai) {
+            if (nilai >= 91) return 'badge-sangat-baik';
+            if (nilai >= 76) return 'badge-baik';
+            if (nilai >= 61) return 'badge-cukup';
+            return 'badge-perlu';
+        }
+
+        function getBarColor(nilai) {
+            if (nilai >= 91) return 'var(--hijau)';
+            if (nilai >= 76) return 'var(--biru)';
+            if (nilai >= 61) return 'var(--kuning)';
+            return 'var(--merah-alert)';
+        }
+
+        function showAlert(msg, type) {
+            const el = document.getElementById('alertBox');
+            el.className = `alert alert-${type}`;
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        function showToast(msg, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ==================== TAB SWITCHING ====================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            if (tabName === 'rekap') updateRekap();
+            if (tabName === 'dashboard') updateDashboard();
+            if (tabName === 'peringkat') updatePeringkat();
+        }
+
+        // ==================== PRINT PDF ====================
+        function cetakPDF() {
+            window.print();
+        }
+
+        // ==================== EXPORT CSV ====================
+        function exportCSV() {
+            if (pesertaList.length === 0) {
+                showToast('Tidak ada data untuk diexport', 'error');
+                return;
+            }
+
+            const sorted = [...pesertaList].sort((a, b) => b.total - a.total);
+            let csv = 'Peringkat,Nama Peserta,Jumlah Anggota,' +
+                kategori.map(k => k.nama).join(',') + ',TOTAL,Keterangan\n';
+
+            sorted.forEach((p, i) => {
+                const nilaiStr = p.nilai.map(n => n.nilai).join(',');
+                csv += `${i+1},${p.nama},${p.jumlahAnggota},${nilaiStr},${p.total.toFixed(2)},${getKeterangan(p.total)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Rekap_Penilaian_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            showToast('File CSV berhasil diunduh!', 'success');
+        }
+
+        // ==================== LOCAL STORAGE ====================
+        function saveData() {
+            localStorage.setItem('lombaKostumData', JSON.stringify(pesertaList));
+        }
+
+        function loadData() {
+            const data = localStorage.getItem('lombaKostumData');
+            if (data) {
+                pesertaList = JSON.parse(data);
+                updateRekap();
+                updateDashboard();
+                updatePeringkat();
+            }
+        }
+    </script>
+</body>
+</html>
